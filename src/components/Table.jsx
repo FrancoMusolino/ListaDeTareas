@@ -48,13 +48,6 @@ export default function Table({ data, dispatch }) {
 
   const deleteRow = id => dispatch({ type: TYPES.DELETEROW, payload: id });
 
-  const handleEdit = () => {
-    alert('jola');
-    // dispatch({ type: TYPES.EDITROW, payload: [name, date] });
-  }
-
-
-
   return (
     <Root sx={{ width: 500, maxWidth: '100%' }}>
       <table aria-label="custom pagination table">
@@ -74,7 +67,7 @@ export default function Table({ data, dispatch }) {
                   {row.date}
                 </td>
                 <td style={{ width: 120 }} align="right">
-                  <TableButtons row={row} deleteRow={deleteRow} handleEdit={handleEdit} />
+                  <TableButtons dispatch={dispatch} row={row} deleteRow={deleteRow} />
                 </td>
               </tr>
             ))}

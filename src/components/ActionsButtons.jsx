@@ -20,10 +20,10 @@ function ActionsButtons({ form, dispatch }) {
     } else {
       if (!form.id) {
         form.id = Date.now();
+        dispatch({ type: TYPES.SENDFORM, payload: form });
       } else {
-        alert('Ya tiene id')
+        dispatch({ type: TYPES.SENDFORMWITHCHANGES, payload: [form, form.id] });
       }
-      dispatch({ type: TYPES.SENDFORM, payload: form });
       dispatch({ type: TYPES.DELETEFORM });
     }
   }
