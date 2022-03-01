@@ -6,11 +6,24 @@ import Stack from '@mui/material/Stack';
 import { TYPES } from '../actions/tareasActions'
 
 function ActionsButtons({ form, dispatch }) {
+  const { name, date } = form;
+
   const handleSend = () => {
-    if (!form.name || !form.date) {
-      alert("Complete correctamente los datos");
+    let regexDate = /^([0-2][0-9]|3[0-1])(\/|-)(0[1-9]|1[0-2])\2(\d{4})$/;
+
+    if (!name.trim() || !date.trim()) {
+      alert("Complete correctamente todos los datos");
+      return;
+    } else if (!regexDate.test(date.trim())) {
+      alert("El campo fecha solo acepta números que hagan referencia al día, mes y año")
+      return;
     } else {
-      dispatch({ tpye: TYPES.SENDFORM, payload: form });
+      if (!form.id) {
+        form.id = Date.now();
+      } else {
+        alert('Ya tiene id')
+      }
+      dispatch({ type: TYPES.SENDFORM, payload: form });
       dispatch({ type: TYPES.DELETEFORM });
     }
   }
@@ -18,14 +31,14 @@ function ActionsButtons({ form, dispatch }) {
   const handleClean = () => dispatch({ type: TYPES.DELETEFORM });
 
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack style={{ display: "flex", justifyContent: "center" }} direction="row" spacing={2}>
       <Button onClick={handleClean} variant="outlined" startIcon={<DeleteIcon />}>
         Limpiar
       </Button>
       <Button onClick={handleSend} variant="contained" endIcon={<SendIcon />}>
         Send
       </Button>
-    </Stack>
+    </Stack >
   );
 }
 

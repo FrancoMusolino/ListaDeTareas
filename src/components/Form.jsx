@@ -1,4 +1,5 @@
 import React from 'react'
+import './Form.css'
 import ActionsButtons from './ActionsButtons';
 import { TYPES } from '../actions/tareasActions'
 
@@ -9,7 +10,7 @@ const Form = ({ form, dispatch }) => {
     return (
         <form style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <input type="text" name="name" placeholder="Nombre" onChange={handleChange} value={form.name} />
-            <input type="text" name="date" placeholder="Fecha" onChange={handleChange} value={form.date} />
+            <input type="text" name="date" placeholder="Fecha de vencimiento" onChange={handleChange} value={form.date} />
             <ActionsButtons form={form} dispatch={dispatch} />
         </form>
     )

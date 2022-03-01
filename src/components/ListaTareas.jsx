@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useReducer } from 'react'
 import Form from './Form'
 import Table from './Table'
 import './ListaTareas.css'
@@ -6,13 +6,12 @@ import { tareasInitialState, tareasReducer } from '../reducers/tareasReducer'
 
 const ListaTareas = () => {
     const [state, dispatch] = useReducer(tareasReducer, tareasInitialState);
+    const { form, db } = state;
 
     return (
         <div className='container'>
-            {state.data.length === 0 ? <p>Esoy vacío</p>
-                : state.data.map(el => <li>{el.name}</li>)}
-            <Table />
-            <Form form={state.form} dispatch={dispatch} />
+            <Table data={db} dispatch={dispatch} />
+            <Form form={form} dispatch={dispatch} />
         </div>
     )
 }

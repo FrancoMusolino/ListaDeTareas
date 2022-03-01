@@ -6,7 +6,11 @@ export const tareasInitialState = {
         date: "",
     },
 
-    data: []
+    db: [
+        { name: "Alario", date: "12-10-2020", id: 1 },
+        { name: "Messi", date: "12-10-2020", id: 2 },
+        { name: "Ronaldo", date: "12-10-2020", id: 3 }
+    ]
 };
 
 export function tareasReducer(state, action) {
@@ -16,18 +20,15 @@ export function tareasReducer(state, action) {
                 ...state,
                 form: {
                     name: "",
-                    date: "",
+                    date: ""
                 }
-            };
+            }
 
         case TYPES.SENDFORM:
             return {
                 ...state,
-                data: [
-                    ...state.data,
-                    action.payload
-                ]
-            };
+                db: [...state.db, action.payload]
+            }
 
         case TYPES.DETECTCHANGES:
             return {
@@ -36,13 +37,25 @@ export function tareasReducer(state, action) {
                     ...state.form,
                     [action.payload[0]]: action.payload[1]
                 }
-            };
+            }
 
-        case TYPES.DELETEROW:
-            return {};
+        case TYPES.DELETEROW: {
+            let newDb = state.db.filter(el => el.id !== action.payload)
+
+            return {
+                ...state,
+                db: newDb
+            }
+        }
 
         case TYPES.EDITROW:
-            return {};
+            return {
+                ...state,
+                form: {
+                    name: action.payload[0],
+                    date: action.payload[1],
+                }
+            }
 
         default: return state;
 

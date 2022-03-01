@@ -1,0 +1,17 @@
+input[type ="text"]{
+    border: thin solid #dedede;
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    margin-bottom: .7rem;
+    outline: none;
+    display: block;
+    min-width: 50vw;
+    max-width: 70vw;
+    font-size: 1rem;
+    line-height: 1;
+    background-color: transparent;
+}
+
+input:focus{
+    border: thin solid #9a9a9a;
+}
