@@ -59,7 +59,7 @@ export default function Table({ data, dispatch }) {
           </tr>
         </thead>
         <tbody>
-          {filas.length === 0 ? <p>No hay tareas</p>
+          {filas.length === 0 ? <tr><td colSpan={3}>No hay tareas</td></tr>
             : filas.map((row) => (
               <tr key={row.id}>
                 <td>{row.name}</td>

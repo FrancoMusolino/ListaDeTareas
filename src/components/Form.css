@@ -1,4 +1,4 @@
-input[type ="text"]{
+input[type ="text"], input[type ="date"]{
     border: thin solid #dedede;
     border-radius: 0.25rem;
     padding: 0.75rem;

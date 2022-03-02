@@ -1,15 +1,18 @@
-import React, { useReducer, useEffect } from 'react'
+import React, { useReducer, useEffect, useContext } from 'react'
 import Form from './Form'
 import Table from './Table'
 import './ListaTareas.css'
 import { tareasInitialState, tareasReducer } from '../reducers/tareasReducer'
 import { TYPES } from '../actions/tareasActions'
+import DateContext from '../context/Date'
 
 const ListaTareas = () => {
     const [state, dispatch] = useReducer(tareasReducer, tareasInitialState);
+    const { dateToPrint } = useContext(DateContext);
     const { form, db } = state;
 
     useEffect(() => {
+        dispatch({ type: TYPES.UPDATEDATE, payload: dateToPrint })
         if (localStorage.getItem('data')) {
             let data = JSON.parse(localStorage.getItem('data'));
             dispatch({ type: TYPES.DATAOFLOCALSTORAGE, payload: data })

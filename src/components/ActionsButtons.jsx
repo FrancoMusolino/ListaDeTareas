@@ -1,21 +1,19 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import { TYPES } from '../actions/tareasActions'
+import DateContext from '../context/Date';
 
 function ActionsButtons({ form, dispatch }) {
   const { name, date } = form;
+  const { dateToPrint } = useContext(DateContext);
 
   const handleSend = () => {
-    let regexDate = /^([0-2][0-9]|3[0-1])(\/|-)(0[1-9]|1[0-2])\2(\d{4})$/;
-
     if (!name.trim() || !date.trim()) {
       alert("Complete correctamente todos los datos");
-      return;
-    } else if (!regexDate.test(date.trim())) {
-      alert("El campo fecha solo acepta números que hagan referencia al día, mes y año")
       return;
     } else {
       if (!form.id) {
@@ -24,11 +22,12 @@ function ActionsButtons({ form, dispatch }) {
       } else {
         dispatch({ type: TYPES.SENDFORMWITHCHANGES, payload: [form, form.id] });
       }
-      dispatch({ type: TYPES.DELETEFORM });
+      dispatch({ type: TYPES.UPDATEDATE, payload: dateToPrint })
     }
   }
 
-  const handleClean = () => dispatch({ type: TYPES.DELETEFORM });
+  const handleClean = () => dispatch({ type: TYPES.UPDATEDATE, payload: dateToPrint });
+
 
   return (
     <Stack style={{ display: "flex", justifyContent: "center" }} direction="row" spacing={2}>

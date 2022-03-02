@@ -6,10 +6,7 @@ export const tareasInitialState = {
         date: "",
     },
 
-    db: [
-        { name: "Proyecto SASS", date: "13-03-2022", id: 1 },
-        { name: "JavaScript Jony Mircha", date: "15-03-2022", id: 2 },
-    ]
+    db: []
 };
 
 export function tareasReducer(state, action) {
@@ -20,12 +17,12 @@ export function tareasReducer(state, action) {
                 db: action.payload
             }
 
-        case TYPES.DELETEFORM:
+        case TYPES.UPDATEDATE:
             return {
                 ...state,
                 form: {
-                    name: "",
-                    date: ""
+                    date: action.payload,
+                    name: ""
                 }
             }
 
