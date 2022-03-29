@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { styled } from '@mui/system';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import TableButtons from './TableButtons';
 import { TYPES } from '../actions/tareasActions';
+import DateContext from '../context/Date';
 
 const grey = {
   50: '#F3F6F9',
@@ -41,6 +44,7 @@ const Root = styled('div')(
 
 export default function Table({ data, dispatch }) {
   const [filas, setFilas] = useState(data);
+  const { dateToPrint } = useContext(DateContext);
 
   useEffect(() => {
     setFilas(data);
@@ -51,28 +55,46 @@ export default function Table({ data, dispatch }) {
   return (
     <Root sx={{ width: 500, maxWidth: '100%' }}>
       <table aria-label="custom pagination table">
-        <thead>
+        <thead >
           <tr>
-            <th>Tarea</th>
+            <th >Tarea</th>
             <th>Vencimiento</th>
-            <th>Acciones</th>
+            <th style={{ textAlign: "center" }}>Acciones</th>
+            <th style={{ textAlign: "center" }}>Estado</th>
           </tr>
         </thead>
-        <tbody>
-          {filas.length === 0 ? <tr><td colSpan={3}>No hay tareas</td></tr>
-            : filas.map((row) => (
+        {filas.length === 0 ? <tr><td colSpan={3}>No hay tareas</td></tr>
+          : filas.map((row) => (
+            <tbody>
               <tr key={row.id}>
                 <td>{row.name}</td>
-                <td style={{ width: 120 }} align="right">
+                <td align="right">
                   {row.date}
                 </td>
-                <td style={{ width: 120 }} align="right">
+                <td align="right">
                   <TableButtons dispatch={dispatch} row={row} deleteRow={deleteRow} />
                 </td>
+                <td style={{ textAlign: "center" }}>
+                  {
+                    dateToPrint > row.date ? <ErrorOutlineIcon style={{ color: "red" }} /> :
+                      <CheckCircleIcon color='success' />
+                  }
+                </td>
               </tr>
-            ))}
-        </tbody>
+            </tbody>
+          ))}
       </table>
-    </Root>
+
+      <div style={{ display: "flex", gap: "10px" }}>
+        <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+          <ErrorOutlineIcon style={{ color: "red" }} />
+          <p style={{ fontSize: "15px" }}>Tarea vencida</p>
+        </div>
+        <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+          <CheckCircleIcon color='success' />
+          <p style={{ fontSize: "15px" }}>Tarea en fecha</p>
+        </div>
+      </div>
+    </Root >
   );
 }
