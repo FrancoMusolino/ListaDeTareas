@@ -63,13 +63,13 @@ export default function Table({ data, dispatch }) {
             <th style={{ textAlign: "center" }}>Estado</th>
           </tr>
         </thead>
-        {filas.length === 0 ? <tr><td colSpan={3}>No hay tareas</td></tr>
+        {filas.length === 0 ? <tr><td colSpan={4}>No hay tareas</td></tr>
           : filas.map((row) => (
             <tbody>
               <tr key={row.id}>
                 <td>{row.name}</td>
                 <td align="right">
-                  {row.date}
+                  {row.date.split("-").reverse().join("/")}
                 </td>
                 <td align="right">
                   <TableButtons dispatch={dispatch} row={row} deleteRow={deleteRow} />

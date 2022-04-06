@@ -5,22 +5,9 @@ const DateContext = createContext();
 const DateProvider = ({ children }) => {
     const [dateToPrint, setDateToPrint] = useState(null);
 
-    let classDate = new Date(),
-        yearNow = classDate.getFullYear(),
-        monthNow = classDate.getMonth() + 1,
-        dateNow = classDate.getDate();
+    let classDate = new Date().toISOString().split("T")[0];
 
-    useEffect(() => {
-        if (monthNow > 9 && dateNow < 10) {
-            setDateToPrint(`${yearNow}-${monthNow}-0${dateNow}`);
-        } else if (monthNow > 9 && dateNow > 9) {
-            setDateToPrint(`${yearNow}-${monthNow}-${dateNow}`);
-        } else if (monthNow < 10 && dateNow < 10) {
-            setDateToPrint(`${yearNow}-0${monthNow}-0${dateNow}`);
-        } else {
-            setDateToPrint(`${yearNow}-0${monthNow}-${dateNow}`);
-        }
-    }, []);
+    useEffect(() => setDateToPrint(classDate), []);
 
     const data = { dateToPrint }
 
@@ -32,10 +19,3 @@ const DateProvider = ({ children }) => {
 export { DateProvider };
 
 export default DateContext;
-
-
-
-
-export const totalDate = 0
-
-
