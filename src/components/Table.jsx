@@ -63,9 +63,9 @@ export default function Table({ data, dispatch }) {
             <th style={{ textAlign: "center" }}>Estado</th>
           </tr>
         </thead>
-        {filas.length === 0 ? <tr><td colSpan={4}>No hay tareas</td></tr>
-          : filas.map((row) => (
-            <tbody>
+        <tbody>
+          {filas.length === 0 ? <tr><td colSpan={4}>No hay tareas</td></tr>
+            : filas.map((row) => (
               <tr key={row.id}>
                 <td>{row.name}</td>
                 <td align="right">
@@ -81,8 +81,8 @@ export default function Table({ data, dispatch }) {
                   }
                 </td>
               </tr>
-            </tbody>
-          ))}
+            ))}
+        </tbody>
       </table>
 
       <div style={{ display: "flex", gap: "10px" }}>
