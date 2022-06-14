@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import TareasReducer from "src/context/TareasReducer";
+import TareasReducer from "../../context/TareasReducer";
 import TableRow from "./TableRow";
 
 const TableBody = () => {

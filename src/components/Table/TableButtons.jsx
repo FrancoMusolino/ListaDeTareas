@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TYPES } from "../../actions/tareasActions";
-import TareasReducer from "src/context/TareasReducer";
+import TareasReducer from "../../context/TareasReducer";
 
 export default function TableButtons({ name, date, id }) {
   const { dispatch } = useContext(TareasReducer);
