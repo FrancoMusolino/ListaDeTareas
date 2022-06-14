@@ -8,16 +8,11 @@ import DateContext from "../../context/Date";
 import TareasReducer from "../../context/TareasReducer";
 
 function FormButtons({ form }) {
-  const { name, date } = form;
+  const { name } = form;
   const { dateToPrint } = useContext(DateContext);
   const { dispatch } = useContext(TareasReducer);
 
   const handleSend = () => {
-    if (!name.trim() || !date.trim()) {
-      alert("Complete correctamente todos los datos");
-      return;
-    }
-
     if (!form.id) {
       form.id = Date.now();
       dispatch({ type: TYPES.SENDFORM, payload: form });
@@ -43,7 +38,12 @@ function FormButtons({ form }) {
       >
         Limpiar
       </Button>
-      <Button onClick={handleSend} variant="contained" endIcon={<SendIcon />}>
+      <Button
+        disabled={!name.trim()}
+        onClick={handleSend}
+        variant="contained"
+        endIcon={<SendIcon />}
+      >
         Send
       </Button>
     </Stack>

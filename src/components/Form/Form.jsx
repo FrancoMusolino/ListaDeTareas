@@ -10,7 +10,11 @@ const Form = () => {
   } = useContext(TareasReducer);
 
   return (
-    <form style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+    <form
+      data-testid="form"
+      style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+      onSubmit={(e) => e.preventDefault()}
+    >
       <FormInput
         type="text"
         name="name"

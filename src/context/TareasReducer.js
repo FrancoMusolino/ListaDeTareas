@@ -21,7 +21,9 @@ const TareasReducerProvider = ({ children }) => {
   }, [state.db]);
 
   useEffect(() => {
-    dispatch({ type: TYPES.UPDATEDATE, payload: dateToPrint });
+    if (dateToPrint) {
+      dispatch({ type: TYPES.UPDATEDATE, payload: dateToPrint });
+    }
   }, [dateToPrint]);
 
   const data = { state, dispatch };
