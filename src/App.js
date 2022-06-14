@@ -1,16 +1,20 @@
-import Loader from './components/Loader';
-import React, { Suspense } from 'react';
-import { DateProvider } from './context/Date';
+import React, { Suspense } from "react";
+import Loader from "./components/Loader";
+import { DateProvider } from "./context/Date";
+import { TareasReducerProvider } from "./context/TareasReducer";
 
-const ListaTareas = React.lazy(
-  () => import('./components/ListaTareas'))
+const ListaTareas = React.lazy(() =>
+  import("./components/ListaTareas/ListaTareas")
+);
 
 function App() {
   return (
     <DateProvider>
-      <Suspense fallback={<Loader />}>
-        <ListaTareas />
-      </Suspense>
+      <TareasReducerProvider>
+        <Suspense fallback={<Loader />}>
+          <ListaTareas />
+        </Suspense>
+      </TareasReducerProvider>
     </DateProvider>
   );
 }
