@@ -40,6 +40,7 @@ function FormButtons({ form }) {
       </Button>
       <Button
         disabled={!name.trim()}
+        type="submit"
         onClick={handleSend}
         variant="contained"
         endIcon={<SendIcon />}

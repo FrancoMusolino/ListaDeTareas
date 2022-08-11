@@ -1,9 +1,14 @@
-const { render, screen, fireEvent } = require("@testing-library/react");
+const {
+  render,
+  screen,
+  fireEvent,
+  createEvent,
+} = require("@testing-library/react");
 import Form from "../Form";
 import { MockedFormComponent } from "./mocks/MockedComponent";
 
 describe("Componente Form", () => {
-  // const event = { preventDefault: () => {} };
+  const e = { preventDefault: () => {} };
 
   beforeEach(() => {
     render(
@@ -18,12 +23,13 @@ describe("Componente Form", () => {
     expect(formElement).toBeInTheDocument();
   });
 
-  // it("Should prevent default on form submit", () => {
-  //   const formElement = screen.getByTestId("form");
-  //   fireEvent.submit(formElement, event);
+  it("Should prevent default on form submit", () => {
+    const formElement = screen.getByTestId("form");
+    const sendFormEvent = createEvent.submit(formElement);
+    fireEvent(formElement, sendFormEvent);
 
-  //   expect(event.preventDefault).toBeCalled();
-  // });
+    expect(sendFormEvent.defaultPrevented).toBe(true);
+  });
 
   it("Should be able to type in input name", () => {
     const inputElement = screen.getByPlaceholderText("Nombre");
