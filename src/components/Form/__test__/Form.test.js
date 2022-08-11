@@ -8,8 +8,6 @@ import Form from "../Form";
 import { MockedFormComponent } from "./mocks/MockedComponent";
 
 describe("Componente Form", () => {
-  const e = { preventDefault: () => {} };
-
   beforeEach(() => {
     render(
       <MockedFormComponent>

@@ -6,7 +6,7 @@ import { Root } from "./TableStyles";
 export default function Table() {
   return (
     <Root sx={{ width: 500, maxWidth: "100%" }}>
-      <table aria-label="custom pagination table">
+      <table data-testid="table" aria-label="custom pagination table">
         <thead>
           <tr>
             <th>Tarea</th>
