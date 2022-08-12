@@ -1,21 +1,22 @@
-import React, { useContext } from "react";
+import { useDateContext } from "../../context/DateContext";
+
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import TableButtons from "./TableButtons";
-import DateContext from "../../context/Date";
 
-const TableRow = (props) => {
-  const { dateToPrint } = useContext(DateContext);
+import TableButtons from "./TableButtons";
+
+const TableRow = ({ name, date, id }) => {
+  const { dateToPrint } = useDateContext();
 
   return (
     <tr>
-      <td>{props.name}</td>
-      <td align="right">{props.date.split("-").reverse().join("/")}</td>
+      <td>{name}</td>
+      <td align="right">{date.split("-").reverse().join("/")}</td>
       <td align="right">
-        <TableButtons {...props} />
+        <TableButtons name={name} date={date} id={id} />
       </td>
       <td style={{ textAlign: "center" }}>
-        {dateToPrint > props.date ? (
+        {dateToPrint > date ? (
           <ErrorOutlineIcon style={{ color: "red" }} />
         ) : (
           <CheckCircleIcon color="success" />

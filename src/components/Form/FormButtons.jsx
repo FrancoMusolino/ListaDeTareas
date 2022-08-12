@@ -1,29 +1,36 @@
-import React, { useContext } from "react";
+import {
+  useFormContext,
+  useTareasContext,
+  useDateContext,
+} from "../../context";
+import { FORM_TYPES, TAREAS_TYPES } from "../../actions";
+
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
-import { TYPES } from "../../actions/tareasActions";
-import DateContext from "../../context/Date";
-import TareasReducer from "../../context/TareasReducer";
 
-function FormButtons({ form }) {
+function FormButtons() {
+  const { dateToPrint } = useDateContext();
+  const { dispatch } = useTareasContext();
+  const { dispatch: formDispatch, state: form } = useFormContext();
   const { name } = form;
-  const { dateToPrint } = useContext(DateContext);
-  const { dispatch } = useContext(TareasReducer);
 
   const handleSend = () => {
     if (!form.id) {
       form.id = Date.now();
-      dispatch({ type: TYPES.SENDFORM, payload: form });
+      dispatch({ type: TAREAS_TYPES.SENDFORM, payload: form });
     } else {
-      dispatch({ type: TYPES.SENDFORMWITHCHANGES, payload: [form, form.id] });
+      dispatch({
+        type: TAREAS_TYPES.SENDFORMWITHCHANGES,
+        payload: [form, form.id],
+      });
     }
-    dispatch({ type: TYPES.UPDATEDATE, payload: dateToPrint });
+    handleClean();
   };
 
   const handleClean = () =>
-    dispatch({ type: TYPES.UPDATEDATE, payload: dateToPrint });
+    formDispatch({ type: FORM_TYPES.CLEAN_FORM, payload: dateToPrint });
 
   return (
     <Stack

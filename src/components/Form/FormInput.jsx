@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
-import { TYPES } from "../../actions/tareasActions";
-import TareasReducer from "../../context/TareasReducer";
-import DateContext from "../../context/Date";
+import { useDateContext, useFormContext } from "../../context";
+import { FORM_TYPES } from "../../actions";
 
-const FormInput = ({ type, name, placeholder = "", value }) => {
-  const { dateToPrint } = useContext(DateContext);
-  const { dispatch } = useContext(TareasReducer);
+const FormInput = ({ type, name, placeholder = "" }) => {
+  const { dispatch, state: form } = useFormContext();
+  const { dateToPrint } = useDateContext();
 
   const handleChange = (e) =>
     dispatch({
-      type: TYPES.DETECTCHANGES,
+      type: FORM_TYPES.DETECTCHANGES,
       payload: [e.target.name, e.target.value],
     });
 
@@ -19,7 +17,7 @@ const FormInput = ({ type, name, placeholder = "", value }) => {
         type={type}
         name={name}
         onChange={(e) => handleChange(e)}
-        value={value}
+        value={form.date}
         min={dateToPrint}
         max="2025-12-31"
       />
@@ -32,7 +30,7 @@ const FormInput = ({ type, name, placeholder = "", value }) => {
       name={name}
       placeholder={placeholder}
       onChange={(e) => handleChange(e)}
-      value={value}
+      value={form.name}
     />
   );
 };

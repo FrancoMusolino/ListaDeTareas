@@ -1,7 +1,7 @@
-import React from "react";
+import { Root } from "./TableStyles";
+
 import TableBody from "./TableBody";
 import TableStatus from "./TableStatus";
-import { Root } from "./TableStyles";
 
 export default function Table() {
   return (

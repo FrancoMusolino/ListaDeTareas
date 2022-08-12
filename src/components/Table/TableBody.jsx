@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import TareasReducer from "../../context/TareasReducer";
+import { useTareasContext } from "../../context";
+
 import TableRow from "./TableRow";
 
 const TableBody = () => {
   const {
     state: { db },
-  } = useContext(TareasReducer);
+  } = useTareasContext();
 
   return (
     <tbody>
