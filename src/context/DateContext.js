@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 
 const DateContext = createContext();
 
-export const DateProvider = ({ children }) => {
+export const DateContextProvider = ({ children }) => {
   const [dateToPrint, setDateToPrint] = useState(null);
 
   const currentDate = new Date().toISOString().split("T")[0];

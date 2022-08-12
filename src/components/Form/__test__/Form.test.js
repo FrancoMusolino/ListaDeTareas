@@ -3,6 +3,7 @@ const {
   screen,
   fireEvent,
   createEvent,
+  prettyDOM,
 } = require("@testing-library/react");
 import Form from "../Form";
 import { MockedFormComponent } from "./mocks/MockedComponent";
@@ -18,6 +19,8 @@ describe("Componente Form", () => {
 
   it("Should render in the document", () => {
     const formElement = screen.getByTestId("form");
+    // console.log(prettyDOM(formElement));
+
     expect(formElement).toBeInTheDocument();
   });
 

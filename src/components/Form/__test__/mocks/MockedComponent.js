@@ -1,10 +1,15 @@
-import { DateProvider } from "../../../../context/Date";
-import { TareasReducerProvider } from "../../../../context/TareasReducer";
+import {
+  DateContextProvider,
+  TareasContextProvider,
+  FormContextProvider,
+} from "../../../../context";
 
 export const MockedFormComponent = ({ children }) => {
   return (
-    <DateProvider>
-      <TareasReducerProvider>{children}</TareasReducerProvider>
-    </DateProvider>
+    <DateContextProvider>
+      <TareasContextProvider>
+        <FormContextProvider>{children}</FormContextProvider>
+      </TareasContextProvider>
+    </DateContextProvider>
   );
 };
