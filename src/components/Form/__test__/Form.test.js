@@ -18,14 +18,14 @@ describe("Componente Form", () => {
   });
 
   it("Should render in the document", () => {
-    const formElement = screen.getByTestId("form");
+    const formElement = screen.getByRole("form");
     // console.log(prettyDOM(formElement));
 
     expect(formElement).toBeInTheDocument();
   });
 
   it("Should prevent default on form submit", () => {
-    const formElement = screen.getByTestId("form");
+    const formElement = screen.getByRole("form");
     const sendFormEvent = createEvent.submit(formElement);
     fireEvent(formElement, sendFormEvent);
 
@@ -60,11 +60,18 @@ describe("Componente Form", () => {
 
   it("The button 'send' should be disable if there is not a value", () => {
     const buttonElement = screen.getByText("Send");
-    const inputElement = screen.getByPlaceholderText("Nombre");
+    const textInputElement = screen.getByPlaceholderText("Nombre");
+    const dateInputElement = screen.getByRole("date");
 
     expect(buttonElement).toBeDisabled();
 
-    fireEvent.change(inputElement, { target: { value: "Terminar React" } });
+    fireEvent.change(dateInputElement, { target: { value: "" } });
+
+    fireEvent.change(textInputElement, { target: { value: "Terminar React" } });
+
+    expect(buttonElement).toBeDisabled();
+
+    fireEvent.change(dateInputElement, { target: { value: "2025-11-20" } });
 
     expect(buttonElement).toBeEnabled();
   });

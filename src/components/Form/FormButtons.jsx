@@ -14,7 +14,7 @@ function FormButtons() {
   const { dateToPrint } = useDateContext();
   const { dispatch } = useTareasContext();
   const { dispatch: formDispatch, state: form } = useFormContext();
-  const { name } = form;
+  const { name, date } = form;
 
   const handleSend = () => {
     if (!form.id) {
@@ -46,7 +46,7 @@ function FormButtons() {
         Limpiar
       </Button>
       <Button
-        disabled={!name.trim()}
+        disabled={!name.trim() || !date.trim()}
         type="submit"
         onClick={handleSend}
         variant="contained"

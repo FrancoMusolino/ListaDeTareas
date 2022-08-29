@@ -6,33 +6,35 @@ export const formInitialState = {
 };
 
 export function formReducer(state, action) {
-  switch (action.type) {
+  const { type, payload } = action;
+
+  switch (type) {
     case FORM_TYPES.UPDATEDATE:
       return {
         ...state,
-        date: action.payload,
+        date: payload,
       };
 
     case FORM_TYPES.CLEAN_FORM:
       return {
         ...state,
         name: "",
-        date: action.payload,
+        date: payload,
         id: null,
       };
 
     case FORM_TYPES.DETECTCHANGES:
       return {
         ...state,
-        [action.payload[0]]: action.payload[1],
+        ...payload,
       };
 
     case FORM_TYPES.EDITROW:
       return {
         ...state,
-        name: action.payload.name,
-        date: action.payload.date,
-        id: action.payload.id,
+        name: payload.name,
+        date: payload.date,
+        id: payload.id,
       };
 
     default:

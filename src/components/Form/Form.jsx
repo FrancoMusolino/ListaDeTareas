@@ -5,7 +5,7 @@ import FormInput from "./FormInput";
 const Form = () => {
   return (
     <form
-      data-testid="form"
+      aria-label="form"
       style={{ display: "flex", flexDirection: "column", gap: "20px" }}
       onSubmit={(e) => e.preventDefault()}
     >

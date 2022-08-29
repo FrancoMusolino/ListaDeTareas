@@ -5,16 +5,18 @@ const FormInput = ({ type, name, placeholder = "" }) => {
   const { dispatch, state: form } = useFormContext();
   const { dateToPrint } = useDateContext();
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     dispatch({
       type: FORM_TYPES.DETECTCHANGES,
-      payload: [e.target.name, e.target.value],
+      payload: { [e.target.name]: e.target.value },
     });
+  };
 
   if (type === "date") {
     return (
       <input
         type={type}
+        role={type}
         name={name}
         onChange={(e) => handleChange(e)}
         value={form.date}
