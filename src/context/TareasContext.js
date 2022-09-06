@@ -3,7 +3,7 @@ import React, { createContext, useReducer, useEffect, useContext } from "react";
 import { tareasInitialState, tareasReducer } from "../reducers";
 import { TAREAS_TYPES } from "../actions";
 
-const TareasContext = createContext();
+export const TareasContext = createContext();
 
 export const TareasContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(tareasReducer, tareasInitialState);

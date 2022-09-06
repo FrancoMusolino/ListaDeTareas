@@ -1,15 +1,21 @@
 import {
   DateContextProvider,
-  TareasContextProvider,
+  TareasContext,
   FormContextProvider,
 } from "../../../../context";
 
-export const MockedTableComponent = ({ children }) => {
+import Table from "../../Table";
+import Form from "../../../Form/Form";
+
+export const MockedTableComponent = ({ data }) => {
   return (
     <DateContextProvider>
-      <TareasContextProvider>
-        <FormContextProvider>{children}</FormContextProvider>
-      </TareasContextProvider>
+      <FormContextProvider>
+        <TareasContext.Provider value={data}>
+          <Table />
+          <Form />
+        </TareasContext.Provider>
+      </FormContextProvider>
     </DateContextProvider>
   );
 };

@@ -9,10 +9,8 @@ export default function TableButtons({ name, date, id }) {
   const { dispatch } = useTareasContext();
   const { dispatch: formDispatch } = useFormContext();
 
-  // console.log(formDispatch);
-
   const handleDelete = () => {
-    let auth = window.confirm(`Desea eliminar la tarea: ${name}`);
+    const auth = window.confirm(`Desea eliminar la tarea: ${name}`);
     if (auth) {
       dispatch({ type: TAREAS_TYPES.DELETEROW, payload: id });
     }
@@ -26,8 +24,8 @@ export default function TableButtons({ name, date, id }) {
       <IconButton onClick={handleDelete} aria-label="delete">
         <DeleteIcon />
       </IconButton>
-      <div onClick={handleEdit} style={{ cursor: "pointer" }}>
-        <IconButton aria-label="delete" color="primary">
+      <div style={{ cursor: "pointer" }}>
+        <IconButton onClick={handleEdit} color="primary">
           <EditIcon />
         </IconButton>
       </div>

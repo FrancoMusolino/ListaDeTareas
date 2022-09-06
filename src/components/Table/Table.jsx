@@ -6,7 +6,7 @@ import TableStatus from "./TableStatus";
 export default function Table() {
   return (
     <Root sx={{ width: 500, maxWidth: "100%" }}>
-      <table data-testid="table" aria-label="custom pagination table">
+      <table aria-label="custom pagination table">
         <thead>
           <tr>
             <th>Tarea</th>
