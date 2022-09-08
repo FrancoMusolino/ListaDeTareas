@@ -1,14 +1,15 @@
-const {
+import {
   render,
   screen,
   fireEvent,
   prettyDOM,
-} = require("@testing-library/react");
+  within,
+} from "@testing-library/react";
+import { compareAsc } from "date-fns";
 
 import { MockedTableComponent } from "./mocks/MockedComponent";
 
 const spyOnWindow = jest.spyOn(window, "confirm");
-const currentDay = new Date().toISOString().split("T")[0];
 
 const data = {
   state: {
@@ -19,7 +20,7 @@ const data = {
         name: "Task 1",
       },
       {
-        date: "2021-12-20",
+        date: "2020-11-18",
         id: 2,
         name: "Task 2",
       },
@@ -53,38 +54,76 @@ describe("Componente Table", () => {
   });
 
   it("Should complete inputs values with row value on click on edit button", () => {
-    const editButton = screen.getAllByTestId("EditIcon")[0].parentElement;
-    const textInputElement = screen.getByPlaceholderText("Nombre");
-    const dateInputElement = screen.getByRole("date");
+    const tableRow = screen.getByRole("row", {
+      name: "Task 1 18/11/2024",
+    });
+    const editButton = within(tableRow).getByTestId("EditIcon");
+    const formElement = screen.getByRole("form");
 
     const { name, date } = data.state.db[0];
 
     fireEvent.click(editButton);
 
-    expect(textInputElement.value).toEqual(name);
-    expect(dateInputElement.value).toEqual(date);
+    expect(formElement).toHaveFormValues({
+      name,
+      date,
+    });
   });
 
   it("Should render CheckCircleIcon icon if the deadline of the task is not expired yet", () => {
-    const checkIcon = screen.queryAllByTestId("CheckCircleIcon");
-    const dates = data.state.db.map((item) => item.date);
+    const tableRow = screen.getByRole("row", {
+      name: "Task 1 18/11/2024",
+    });
+    const checkIcon = within(tableRow).queryByTestId("CheckCircleIcon");
 
-    if (dates.some((date) => date >= currentDay)) {
-      expect(checkIcon.length - 1).toBeTruthy();
+    const { date } = data.state.db[0];
+
+    /* Return 1 if the first date is after the second, -1 if the first date is before the second or 0 if dates are equal.*/
+
+    const isExpired = compareAsc(new Date(date), new Date());
+
+    if (isExpired >= 0) {
+      expect(checkIcon).toBeTruthy();
     } else {
-      expect(checkIcon.length - 1).toBeFalsy();
+      expect(checkIcon).toBeFalsy();
     }
   });
 
   it("Should render ErrorOutlineIcon icon if the deadline of the task is expired", () => {
-    const errorIcon = screen.queryAllByTestId("ErrorOutlineIcon");
-    const dates = data.state.db.map((item) => item.date);
+    const tableRow = screen.getByRole("row", {
+      name: "Task 2 18/11/2020",
+    });
+    const errorIcon = within(tableRow).queryByTestId("ErrorOutlineIcon");
 
-    if (dates.some((date) => date < currentDay)) {
-      expect(errorIcon.length - 1).toBeTruthy();
+    const { date } = data.state.db[1];
+
+    const isExpired = compareAsc(new Date(date), new Date());
+
+    if (isExpired < 0) {
+      expect(errorIcon).toBeTruthy();
     } else {
-      expect(errorIcon.length - 1).toBeFalsy();
+      expect(errorIcon).toBeFalsy();
     }
+  });
+
+  it("Should be able to change table data when form is submitted when previously the edit button of the row was clicked", () => {
+    const tableRow = screen.getByRole("row", {
+      name: "Task 1 18/11/2024",
+    });
+    const tableCell = screen.getByRole("cell", {
+      name: "Task 1",
+    });
+
+    const editButton = within(tableRow).getByTestId("EditIcon");
+    const submitButton = screen.getByRole("button", { name: /send/i });
+
+    const textInputElement = screen.getByPlaceholderText("Nombre");
+
+    fireEvent.click(editButton);
+    fireEvent.change(textInputElement, { target: { value: "Task finished" } });
+    fireEvent.click(submitButton);
+
+    expect(tableCell).toHaveTextContent("Task finished");
   });
 });
 
@@ -97,13 +136,14 @@ describe("Componente Table (without beforeEach)", () => {
 
     fireEvent.click(deleteButton);
 
-    const spyCall = spyOnWindow.mockReturnValue(true);
+    // const spyCall = spyOnWindow.mockReturnValue(true);
+    // spyCall();
 
-    if (spyCall()) {
-      data.state.db.shift();
-    }
+    // if (spyCall()) {
+    //   data.state.db.shift();
+    // }
 
-    await rerender(<MockedTableComponent data={data} />);
+    // await rerender(<MockedTableComponent />);
     const tableRows = screen.getAllByText("Task", { exact: false });
 
     expect(tableRows).toHaveLength(dbLength - 1);
