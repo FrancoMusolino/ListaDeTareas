@@ -1,13 +1,12 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import { normalizedDate } from "../utils";
 
 const DateContext = createContext();
 
 export const DateContextProvider = ({ children }) => {
   const [dateToPrint, setDateToPrint] = useState(null);
 
-  const currentDate = new Date().toISOString().split("T")[0];
-
-  useEffect(() => setDateToPrint(currentDate), [currentDate]);
+  useEffect(() => setDateToPrint(normalizedDate), [normalizedDate]);
 
   const data = { dateToPrint };
 

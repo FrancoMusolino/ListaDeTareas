@@ -120,7 +120,9 @@ describe("Componente Table", () => {
     const textInputElement = screen.getByPlaceholderText("Nombre");
 
     fireEvent.click(editButton);
-    fireEvent.change(textInputElement, { target: { value: "Task finished" } });
+    fireEvent.change(textInputElement, {
+      target: { value: "Task finished" },
+    });
     fireEvent.click(submitButton);
 
     expect(tableCell).toHaveTextContent("Task finished");
