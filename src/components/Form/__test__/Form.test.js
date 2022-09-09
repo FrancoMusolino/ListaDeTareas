@@ -5,8 +5,11 @@ const {
   createEvent,
   prettyDOM,
 } = require("@testing-library/react");
-import Form from "../Form";
+
 import { MockedFormComponent } from "./mocks/MockedComponent";
+import { normalizedDate } from "../../../utils";
+
+import Form from "../Form";
 
 describe("Componente Form", () => {
   beforeEach(() => {
@@ -38,7 +41,7 @@ describe("Componente Form", () => {
     expect(inputElement.value).toEqual("Terminar React");
   });
 
-  it("Should be able to clean the input value on click in button 'Limpiar'", () => {
+  it("Should clean the input value on click on button 'Limpiar'", () => {
     const buttonElement = screen.getByText("Limpiar");
     const inputElement = screen.getByPlaceholderText("Nombre");
 
@@ -48,7 +51,7 @@ describe("Componente Form", () => {
     expect(inputElement.value).toEqual("");
   });
 
-  it("Should be able to clean the input value on click in button 'Send'", () => {
+  it("Should clean the input value on click on button 'Send'", () => {
     const buttonElement = screen.getByText("Send");
     const inputElement = screen.getByPlaceholderText("Nombre");
 
@@ -74,5 +77,11 @@ describe("Componente Form", () => {
     fireEvent.change(dateInputElement, { target: { value: "2025-11-20" } });
 
     expect(buttonElement).toBeEnabled();
+  });
+
+  it("The user should not choose a past date", () => {
+    const dateInputElement = screen.getByRole("date");
+
+    expect(dateInputElement).toHaveAttribute("min", normalizedDate);
   });
 });

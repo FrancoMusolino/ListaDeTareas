@@ -9,7 +9,7 @@ const TableBody = () => {
 
   return (
     <tbody>
-      {db.length === 0 ? (
+      {!db.length ? (
         <tr>
           <td colSpan={4}>No hay tareas</td>
         </tr>

@@ -1,25 +1,26 @@
-const {
+import {
   render,
   screen,
   fireEvent,
   prettyDOM,
-} = require("@testing-library/react");
+  within,
+} from "@testing-library/react";
+import { compareAsc } from "date-fns";
 
 import { MockedTableComponent } from "./mocks/MockedComponent";
 
 const spyOnWindow = jest.spyOn(window, "confirm");
-const currentDay = new Date().toISOString().split("T")[0];
 
 const data = {
   state: {
     db: [
       {
-        date: "2024-11-18",
+        date: "2025-11-18",
         id: 1,
         name: "Task 1",
       },
       {
-        date: "2021-12-20",
+        date: "2020-11-18",
         id: 2,
         name: "Task 2",
       },
@@ -46,44 +47,62 @@ describe("Componente Table", () => {
     expect(emptyMessage).not.toBeInTheDocument();
   });
 
-  it("Should render table rows according of the numbers of tasks", () => {
+  it("Should render table rows according to the numbers of tasks", () => {
     const tableRows = screen.getAllByText("Task", { exact: false });
 
     expect(tableRows).toHaveLength(data.state.db.length);
   });
 
   it("Should complete inputs values with row value on click on edit button", () => {
-    const editButton = screen.getAllByTestId("EditIcon")[0].parentElement;
-    const textInputElement = screen.getByPlaceholderText("Nombre");
-    const dateInputElement = screen.getByRole("date");
+    const tableRow = screen.getByRole("row", {
+      name: "Task 1 18/11/2025",
+    });
+    const editButton = within(tableRow).getByTestId("EditIcon");
+    const formElement = screen.getByRole("form");
 
     const { name, date } = data.state.db[0];
 
     fireEvent.click(editButton);
 
-    expect(textInputElement.value).toEqual(name);
-    expect(dateInputElement.value).toEqual(date);
+    expect(formElement).toHaveFormValues({
+      name,
+      date,
+    });
   });
 
   it("Should render CheckCircleIcon icon if the deadline of the task is not expired yet", () => {
-    const checkIcon = screen.queryAllByTestId("CheckCircleIcon");
-    const dates = data.state.db.map((item) => item.date);
+    const tableRow = screen.getByRole("row", {
+      name: "Task 1 18/11/2025",
+    });
+    const checkIcon = within(tableRow).queryByTestId("CheckCircleIcon");
 
-    if (dates.some((date) => date >= currentDay)) {
-      expect(checkIcon.length - 1).toBeTruthy();
+    const { date } = data.state.db[0];
+
+    /* Return 1 if the first date is after the second, -1 if the first date is before the second or 0 if dates are equal.*/
+
+    const isExpired = compareAsc(new Date(date), new Date());
+
+    if (isExpired >= 0) {
+      expect(checkIcon).toBeTruthy();
     } else {
-      expect(checkIcon.length - 1).toBeFalsy();
+      expect(checkIcon).toBeFalsy();
     }
   });
 
   it("Should render ErrorOutlineIcon icon if the deadline of the task is expired", () => {
-    const errorIcon = screen.queryAllByTestId("ErrorOutlineIcon");
-    const dates = data.state.db.map((item) => item.date);
+    const tableRow = screen.getByRole("row", {
+      name: "Task 2 18/11/2020",
+    });
+    const errorIcon = within(tableRow).queryByTestId("ErrorOutlineIcon");
 
-    if (dates.some((date) => date < currentDay)) {
-      expect(errorIcon.length - 1).toBeTruthy();
+    const { date } = data.state.db[1];
+
+    const isExpired = compareAsc(new Date(date), new Date());
+
+    if (isExpired < 0) {
+      expect(errorIcon).toBeTruthy();
     } else {
-      expect(errorIcon.length - 1).toBeFalsy();
+      expect(errorIcon).toBeFalsy();
     }
   });
 });
@@ -92,7 +111,14 @@ describe("Componente Table (without beforeEach)", () => {
   it("Should remove the row when user clicks on delete(trash) button", async () => {
     const { rerender } = render(<MockedTableComponent data={data} />);
 
-    const deleteButton = screen.getAllByTestId("DeleteIcon")[0].parentElement;
+    const row = screen.getByRole("row", {
+      name: "Task 2 18/11/2020",
+    });
+
+    const deleteButton = within(row).getByRole("button", {
+      name: /delete/i,
+    });
+
     const dbLength = data.state.db.length;
 
     fireEvent.click(deleteButton);
@@ -112,7 +138,14 @@ describe("Componente Table (without beforeEach)", () => {
   it("Should not remove the row when user clicks on delete(trash) button but not confirm the action", async () => {
     const { rerender } = render(<MockedTableComponent data={data} />);
 
-    const deleteButton = screen.getAllByTestId("DeleteIcon")[0].parentElement;
+    const row = screen.getByRole("row", {
+      name: "Task 2 18/11/2020",
+    });
+
+    const deleteButton = within(row).getByRole("button", {
+      name: /delete/i,
+    });
+
     const dbLength = data.state.db.length;
 
     fireEvent.click(deleteButton);
@@ -124,6 +157,7 @@ describe("Componente Table (without beforeEach)", () => {
     }
 
     await rerender(<MockedTableComponent data={data} />);
+
     const tableRows = screen.getAllByText("Task", { exact: false });
 
     expect(tableRows).toHaveLength(dbLength);
