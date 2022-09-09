@@ -21,7 +21,7 @@ const FormInput = ({ type, name, placeholder = "" }) => {
         onChange={(e) => handleChange(e)}
         value={form.date}
         min={dateToPrint}
-        max="2025-12-31"
+        max="2028-12-31"
       />
     );
   }

@@ -15,7 +15,7 @@ const data = {
   state: {
     db: [
       {
-        date: "2024-11-18",
+        date: "2025-11-18",
         id: 1,
         name: "Task 1",
       },
@@ -47,7 +47,7 @@ describe("Componente Table", () => {
     expect(emptyMessage).not.toBeInTheDocument();
   });
 
-  it("Should render table rows according of the numbers of tasks", () => {
+  it("Should render table rows according to the numbers of tasks", () => {
     const tableRows = screen.getAllByText("Task", { exact: false });
 
     expect(tableRows).toHaveLength(data.state.db.length);
@@ -55,7 +55,7 @@ describe("Componente Table", () => {
 
   it("Should complete inputs values with row value on click on edit button", () => {
     const tableRow = screen.getByRole("row", {
-      name: "Task 1 18/11/2024",
+      name: "Task 1 18/11/2025",
     });
     const editButton = within(tableRow).getByTestId("EditIcon");
     const formElement = screen.getByRole("form");
@@ -72,7 +72,7 @@ describe("Componente Table", () => {
 
   it("Should render CheckCircleIcon icon if the deadline of the task is not expired yet", () => {
     const tableRow = screen.getByRole("row", {
-      name: "Task 1 18/11/2024",
+      name: "Task 1 18/11/2025",
     });
     const checkIcon = within(tableRow).queryByTestId("CheckCircleIcon");
 
@@ -105,47 +105,31 @@ describe("Componente Table", () => {
       expect(errorIcon).toBeFalsy();
     }
   });
-
-  it("Should be able to change table data when form is submitted when previously the edit button of the row was clicked", () => {
-    const tableRow = screen.getByRole("row", {
-      name: "Task 1 18/11/2024",
-    });
-    const tableCell = screen.getByRole("cell", {
-      name: "Task 1",
-    });
-
-    const editButton = within(tableRow).getByTestId("EditIcon");
-    const submitButton = screen.getByRole("button", { name: /send/i });
-
-    const textInputElement = screen.getByPlaceholderText("Nombre");
-
-    fireEvent.click(editButton);
-    fireEvent.change(textInputElement, {
-      target: { value: "Task finished" },
-    });
-    fireEvent.click(submitButton);
-
-    expect(tableCell).toHaveTextContent("Task finished");
-  });
 });
 
 describe("Componente Table (without beforeEach)", () => {
   it("Should remove the row when user clicks on delete(trash) button", async () => {
     const { rerender } = render(<MockedTableComponent data={data} />);
 
-    const deleteButton = screen.getAllByTestId("DeleteIcon")[0].parentElement;
+    const row = screen.getByRole("row", {
+      name: "Task 2 18/11/2020",
+    });
+
+    const deleteButton = within(row).getByRole("button", {
+      name: /delete/i,
+    });
+
     const dbLength = data.state.db.length;
 
     fireEvent.click(deleteButton);
 
-    // const spyCall = spyOnWindow.mockReturnValue(true);
-    // spyCall();
+    const spyCall = spyOnWindow.mockReturnValue(true);
 
-    // if (spyCall()) {
-    //   data.state.db.shift();
-    // }
+    if (spyCall()) {
+      data.state.db.shift();
+    }
 
-    // await rerender(<MockedTableComponent />);
+    await rerender(<MockedTableComponent data={data} />);
     const tableRows = screen.getAllByText("Task", { exact: false });
 
     expect(tableRows).toHaveLength(dbLength - 1);
@@ -154,7 +138,14 @@ describe("Componente Table (without beforeEach)", () => {
   it("Should not remove the row when user clicks on delete(trash) button but not confirm the action", async () => {
     const { rerender } = render(<MockedTableComponent data={data} />);
 
-    const deleteButton = screen.getAllByTestId("DeleteIcon")[0].parentElement;
+    const row = screen.getByRole("row", {
+      name: "Task 2 18/11/2020",
+    });
+
+    const deleteButton = within(row).getByRole("button", {
+      name: /delete/i,
+    });
+
     const dbLength = data.state.db.length;
 
     fireEvent.click(deleteButton);
@@ -166,6 +157,7 @@ describe("Componente Table (without beforeEach)", () => {
     }
 
     await rerender(<MockedTableComponent data={data} />);
+
     const tableRows = screen.getAllByText("Task", { exact: false });
 
     expect(tableRows).toHaveLength(dbLength);
